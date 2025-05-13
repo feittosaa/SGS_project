@@ -1,0 +1,117 @@
+-- Tabela de Usuários (Grupos)
+CREATE TABLE usuario (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    nome_grupo VARCHAR(100),
+    login VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
+
+-- Tabela de Funcionários
+CREATE TABLE funcionario (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    salario NUMERIC(10,2) NOT NULL,
+    id_grupo INTEGER REFERENCES usuario(id) ON DELETE SET NULL
+);
+
+-- Tabela de Clientes
+CREATE TABLE cliente (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf CHAR(11) UNIQUE,
+    data_aniversario DATE,
+    telefone VARCHAR(20),
+    id_grupo INTEGER REFERENCES usuario(id) ON DELETE SET NULL
+);
+
+-- Tabela de Serviços
+CREATE TABLE servico (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50),
+    valor NUMERIC(10,2),
+    id_grupo INTEGER REFERENCES usuario(id) ON DELETE SET NULL
+);
+
+-- Tabela de Produtos
+CREATE TABLE produto (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50),
+    uso_interno BOOLEAN DEFAULT TRUE,
+    valor NUMERIC(10,2),
+    quantidade FLOAT,
+    id_grupo INTEGER REFERENCES usuario(id) ON DELETE SET NULL
+);
+
+-- Tabela de Atendimento: cliente_servico
+CREATE TABLE cliente_servico (
+    id SERIAL PRIMARY KEY,
+    id_cliente INTEGER REFERENCES cliente(id) ON DELETE CASCADE,
+    id_funcionario INTEGER REFERENCES funcionario(id) ON DELETE SET NULL,
+    id_servico INTEGER REFERENCES servico(id) ON DELETE SET NULL,
+    data_atendimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    valor NUMERIC(10,2),
+    observacoes TEXT
+);
+
+-- Tabela de Venda: cliente_produto
+CREATE TABLE cliente_produto (
+    id SERIAL PRIMARY KEY,
+    id_cliente INTEGER REFERENCES cliente(id) ON DELETE CASCADE,
+    id_funcionario INTEGER REFERENCES funcionario(id) ON DELETE SET NULL,
+    id_produto INTEGER REFERENCES produto(id) ON DELETE SET NULL,
+    data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    quantidade FLOAT,
+    valor_total NUMERIC(10,2)
+);
+
+---------------------------------
+-- Inserção de exemplos
+
+-- Inserção de Usuários (Grupos)
+INSERT INTO usuario (nome, nome_grupo, login, senha) VALUES
+('Salão A', NULL, 'salao.a', 'salaoa'),
+('Ana Costa', 'Salão A', 'ana.costa', 'senhaSegura123'),
+('Bruno Lima', 'Salão A', 'bruno.lima', 'brunoSenha456'),
+('Salão B', NULL, 'salao.b', 'salaob'),
+('Carla Dias', 'Salão B', 'carla.dias', 'finance2025');
+
+-- Inserção de Funcionários
+INSERT INTO funcionario (nome, salario, id_grupo) VALUES
+('João Silva', 3500.00, 1),
+('Mariana Oliveira', 2800.50, 1),
+('Carlos Santos', 4200.75, 4);
+
+-- Inserção de Clientes
+INSERT INTO cliente (nome, cpf, data_aniversario, telefone, id_grupo) VALUES
+('Fernanda Souza', '12345678901', '1990-04-15', '(11)99999-1111', 1),
+('Ricardo Alves', '98765432100', '1985-12-10', '(21)98888-2222', 1),
+('Luciana Rocha', '45678912300', '2000-07-25', '(31)97777-3333', 4);
+
+-- Inserção de Serviços
+INSERT INTO servico (nome, categoria, valor, id_grupo) VALUES
+('Corte de Cabelo Masculino', 'Cabelos', 45.00, 1),
+('Mão', 'Manicure', 30.00, 1),
+('Limpeza de Pele', 'Estética', 120.00, 4);
+
+-- Inserção de Produtos
+INSERT INTO produto (nome, categoria, uso_interno, valor, quantidade, id_grupo) VALUES
+('Shampoo Profissional', 'Cabelos', FALSE, 25.00, 12.5, 1),
+('Creme Hidratante', 'Estética', FALSE, 40.00, 8.0, 4),
+('Pó descolorante', 'Cabelos', TRUE, 0.50, 100.0, 1);
+
+-- Inserção de Atendimento (cliente_servico)
+INSERT INTO cliente_servico (id_cliente, id_funcionario, id_servico, valor, observacoes)
+VALUES
+(1, 1, 1, 45.00, 'Corte padrão'),
+(2, 2, 2, 30.00, 'Manicure simples'),
+(3, 3, 3, 120.00, 'Pacote completo');
+
+-- Inserção de Venda (cliente_produto)
+INSERT INTO cliente_produto (id_cliente, id_funcionario, id_produto, quantidade, valor_total)
+VALUES
+(1, 1, 1, 1, 25.00),
+(2, 2, 3, 5, 2.50),
+(3, 3, 2, 2, 80.00);

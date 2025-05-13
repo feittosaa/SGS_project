@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0" version="27.0.4">
+  <diagram name="Esquema de Banco de Dados" id="EsquemaBD">
+    <mxGraphModel dx="1627" dy="946" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="usuario" value="Usuario&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ nome : VARCHAR(100)&#xa;+ nome_grupo : VARCHAR(100)&#xa;+ login : VARCHAR(50)&#xa;+ senha : VARCHAR(255)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=180;" parent="1" vertex="1">
+          <mxGeometry x="30" y="310" width="250" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="funcionario" value="Funcionario&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ nome : VARCHAR(100)&#xa;+ salario : NUMERIC(10,2)&#xa;+ id_grupo : INTEGER (FK → usuario.id)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=140;" parent="1" vertex="1">
+          <mxGeometry x="414" y="60" width="250" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="cliente" value="Cliente&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ nome : VARCHAR(100)&#xa;+ cpf : CHAR(11)&#xa;+ data_aniversario : DATE&#xa;+ telefone : VARCHAR(20)&#xa;+ id_grupo : INTEGER (FK → usuario.id)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=180;" parent="1" vertex="1">
+          <mxGeometry x="414" y="630" width="250" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="servico" value="Servico&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ nome : VARCHAR(100)&#xa;+ categoria : VARCHAR(50)&#xa;+ valor : NUMERIC(10,2)&#xa;+ id_grupo : INTEGER (FK → usuario.id)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=160;" parent="1" vertex="1">
+          <mxGeometry x="414" y="440" width="250" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="produto" value="Produto&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ nome : VARCHAR(100)&#xa;+ categoria : VARCHAR(50)&#xa;+ uso_interno : BOOLEAN&#xa;+ valor : NUMERIC(10,2)&#xa;+ quantidade : FLOAT&#xa;+ id_grupo : INTEGER (FK → usuario.id)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=180;" parent="1" vertex="1">
+          <mxGeometry x="414" y="230" width="250" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="cliente_servico" value="Cliente_Servico&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ id_cliente : INTEGER (FK → cliente.id)&#xa;+ id_funcionario : INTEGER (FK → funcionario.id)&#xa;+ id_servico : INTEGER (FK → servico.id)&#xa;+ data_atendimento : TIMESTAMP&#xa;+ valor : NUMERIC(10,2)&#xa;+ observacoes : TEXT" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=200;" parent="1" vertex="1">
+          <mxGeometry x="760" y="370" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="cliente_produto" value="Cliente_Produto&#xa;------------------&#xa;+ id : SERIAL (PK)&#xa;+ id_cliente : INTEGER (FK → cliente.id)&#xa;+ id_funcionario : INTEGER (FK → funcionario.id)&#xa;+ id_produto : INTEGER (FK → produto.id)&#xa;+ data_venda : TIMESTAMP&#xa;+ quantidade : FLOAT&#xa;+ valor_total : NUMERIC(10,2)" style="shape=swimlane;whiteSpace=wrap;html=1;startSize=200;" parent="1" vertex="1">
+          <mxGeometry x="760" y="90" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="rel1" style="endArrow=block;html=1;" parent="1" source="funcionario" target="usuario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel2" style="endArrow=block;html=1;" parent="1" source="cliente" target="usuario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel3" style="endArrow=block;html=1;" parent="1" source="servico" target="usuario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel4" style="endArrow=block;html=1;" parent="1" source="produto" target="usuario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel5" style="endArrow=block;html=1;" parent="1" source="cliente_servico" target="cliente" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel6" style="endArrow=block;html=1;" parent="1" source="cliente_servico" target="funcionario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel7" style="endArrow=block;html=1;" parent="1" source="cliente_servico" target="servico" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel8" style="endArrow=block;html=1;" parent="1" source="cliente_produto" target="cliente" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel9" style="endArrow=block;html=1;" parent="1" source="cliente_produto" target="funcionario" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel10" style="endArrow=block;html=1;" parent="1" source="cliente_produto" target="produto" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
