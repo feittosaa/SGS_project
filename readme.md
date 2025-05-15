@@ -17,7 +17,6 @@ O objetivo do projeto é fornecer uma API simples e funcional para gerenciar cli
 ## Como Rodar o Projeto
 
 1. Clone o repositório:
-  ```bash
   git clone https://github.com/seu-usuario/SGS.git
   cd SGS
 
