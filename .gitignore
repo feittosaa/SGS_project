@@ -1,0 +1,19 @@
+# Arquivos do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ambiente virtual
+venv/
+.env/
+
+# Arquivos de log
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
