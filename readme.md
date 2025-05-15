@@ -2,7 +2,7 @@
 
 Este projeto é um sistema de gerenciamento de salões de beleza desenvolvido em **FastAPI** como parte da disciplina **PAV - Programação em Ambiente Visual** na faculdade.
 
-O objetivo do é fornecer uma API backend simples e funcional para gerenciar clientes, serviços e funcionários de salões de beleza.
+O objetivo do projeto é fornecer uma API simples e funcional para gerenciar clientes, serviços e funcionários de salões de beleza.
 
 ---
 
