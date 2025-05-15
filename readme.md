@@ -10,8 +10,7 @@ O objetivo do é fornecer uma API backend simples e funcional para gerenciar cli
 
 - [Python 3.10+](https://www.python.org/)
 - [FastAPI](https://fastapi.tiangolo.com/)
-- [Uvicorn](https://www.uvicorn.org/) - servidor ASGI
-- (Opcional) SQLAlchemy, Pydantic, PostgreSQL, etc.
+- [Uvicorn](https://www.uvicorn.org/)
 
 ---
 
@@ -35,7 +34,6 @@ O objetivo do é fornecer uma API backend simples e funcional para gerenciar cli
 5. Acesse no navegador:
   API: http://localhost:8000/
   Documentação Swagger: http://localhost:8000/docs
-
 
 ---
 
