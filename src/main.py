@@ -3,35 +3,32 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-class Funcionario(BaseModel):
-    id: SERIAL
+class FuncionarioInput(BaseModel):
     nome: str
     salario: float
     id_grupo: int
 
+class Funcionario(FuncionarioInput):
+    id: int
 
-Funcionarios = []
+Funcionarios: list[Funcionario] = []
+next_id = 1
 
-@app.get("/")
-def root():
-    return {"message": "Bem vindo!"}
+@app.post("/funcionarios/", response_model=Funcionario)
+def create_funcionario(func: FuncionarioInput):
+    global next_id
+    new_func = Funcionario(id=next_id, **func.dict())
+    Funcionarios.append(new_func)
+    next_id += 1
+    return new_func
 
+@app.get("/funcionarios/", response_model=list[Funcionario])
+def list_funcionarios():
+    return Funcionarios
 
-@app.get("/Funcionarios", response_model=list[Funcionario])
-def get_Funcionarios():
-    if Funcionarios:
-        return Funcionarios
-    else:
-        raise HTTPException(status_code=404, detail=f"Funcionário não encontrado")
-
-@app.get("/Funcionarios/{Funcionario_id}", response_model=Funcionario)
-def get_Funcionario(Funcionario_id: int) -> Funcionario:
-    if Funcionario_id < len(Funcionarios):
-        return Funcionarios[Funcionario_id]
-    else:
-        raise HTTPException(status_code=404, detail=f"Funcionário não encontrado")
-
-@app.post("/Funcionarios")
-def create_Funcionario(Funcionario: Funcionario):
-    Funcionarios.append(Funcionario)
-    return Funcionario
+@app.get("/funcionarios/{func_id}", response_model=Funcionario)
+def get_funcionario(func_id: int):
+    for f in Funcionarios:
+        if f.id == func_id:
+            return f
+    raise HTTPException(status_code=404, detail="Funcionário não encontrado")
