@@ -3,32 +3,35 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-class Item(BaseModel):
-    text: str = None
-    is_done: bool = False
+class Funcionario(BaseModel):
+    id: SERIAL
+    nome: str
+    salario: float
+    id_grupo: int
 
-items = []
+
+Funcionarios = []
 
 @app.get("/")
 def root():
-    return {"message": "Hello, FastAPI!"}
+    return {"message": "Bem vindo!"}
 
 
-@app.get("/items", response_model=list[Item])
-def get_items():
-    if items:
-        return items
+@app.get("/Funcionarios", response_model=list[Funcionario])
+def get_Funcionarios():
+    if Funcionarios:
+        return Funcionarios
     else:
-        raise HTTPException(status_code=404, detail=f"Item not found")
+        raise HTTPException(status_code=404, detail=f"Funcionário não encontrado")
 
-@app.get("/items/{item_id}", response_model=Item)
-def get_item(item_id: int) -> Item:
-    if item_id < len(items):
-        return items[item_id]
+@app.get("/Funcionarios/{Funcionario_id}", response_model=Funcionario)
+def get_Funcionario(Funcionario_id: int) -> Funcionario:
+    if Funcionario_id < len(Funcionarios):
+        return Funcionarios[Funcionario_id]
     else:
-        raise HTTPException(status_code=404, detail=f"Item not found")
+        raise HTTPException(status_code=404, detail=f"Funcionário não encontrado")
 
-@app.post("/items")
-def create_item(item: Item):
-    items.append(item)
-    return item
+@app.post("/Funcionarios")
+def create_Funcionario(Funcionario: Funcionario):
+    Funcionarios.append(Funcionario)
+    return Funcionario
