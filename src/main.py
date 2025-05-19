@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from src.routes.funcionario_routes import router as funcionario_router
+from src.routes.endpoints import router
+from src.database.base import Base
+from src.database.session import engine
 
-app = FastAPI(title="SGS")
+app = FastAPI(title="SGS API")
 
-# Inclui as rotas no app
-app.include_router(funcionario_router, prefix="/api")
+app.include_router(router, prefix="/api")
