@@ -1,31 +1,31 @@
 from sqlalchemy.orm import Session
 from src.models.funcionario import Funcionario
-from src.schemas.funcionario_schema import FuncionarioCreate, FuncionarioUpdate
-from src.repositories.funcionario_repository import FuncionarioRepository
+from src.schemas.funcionario_schema import FuncionarioCreate
 
-class FuncionarioService:
-    def __init__(self, db: Session):
-        self.repo = FuncionarioRepository(db)
+def criar_funcionario(db: Session, funcionario: FuncionarioCreate):
+    db_item = Funcionario(**funcionario.dict())
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
 
-    def listar(self):
-        return self.repo.get_all()
+def obter_funcionario(db: Session, funcionario_id: int):
+    return db.query(Funcionario).filter(Funcionario.id == funcionario_id).first()
 
-    def buscar_por_id(self, id: int):
-        return self.repo.get_by_id(id)
+def atualizar_funcionario(db: Session, funcionario_id: int, dados: FuncionarioCreate):
+    item = db.query(Funcionario).filter(Funcionario.id == funcionario_id).first()
+    if not item:
+        return None
+    for key, value in dados.dict().items():
+        setattr(item, key, value)
+    db.commit()
+    db.refresh(item)
+    return item
 
-    def criar(self, data: FuncionarioCreate):
-        novo = Funcionario(nome=data.nome, salario=data.salario)
-        return self.repo.create(novo)
-
-    def editar(self, id: int, data: FuncionarioUpdate):
-        funcionario = self.repo.get_by_id(id)
-        if not funcionario:
-            return None
-        return self.repo.update(funcionario, data.dict())
-
-    def excluir(self, id: int):
-        funcionario = self.repo.get_by_id(id)
-        if not funcionario:
-            return None
-        self.repo.delete(funcionario)
-        return funcionario
+def deletar_funcionario(db: Session, funcionario_id: int):
+    item = db.query(Funcionario).filter(Funcionario.id == funcionario_id).first()
+    if not item:
+        return False
+    db.delete(item)
+    db.commit()
+    return True

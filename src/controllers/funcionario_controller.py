@@ -1,38 +1,32 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
-
+from src.schemas.funcionario_schema import FuncionarioCreate, FuncionarioRead
 from src.database.session import get_db
-from src.schemas.funcionario_schema import *
-from src.services.funcionario_service import FuncionarioService
+from src.services import funcionario_service
 
-router = APIRouter()
+router = APIRouter(tags=["Funcionários"])
 
-@router.get("/funcionarios", response_model=List[FuncionarioResponse])
-def listar(db: Session = Depends(get_db)):
-    return FuncionarioService(db).listar()
+@router.post("/", response_model=FuncionarioRead)
+def criar_funcionario(funcionario: FuncionarioCreate, db: Session = Depends(get_db)):
+    return funcionario_service.criar_funcionario(db, funcionario)
 
-@router.get("/funcionarios/{id}", response_model=FuncionarioResponse)
-def buscar(id: int, db: Session = Depends(get_db)):
-    funcionario = FuncionarioService(db).buscar_por_id(id)
-    if not funcionario:
-        raise HTTPException(404, "Funcionário não encontrado")
-    return funcionario
+@router.get("/{funcionario_id}", response_model=FuncionarioRead)
+def obter_funcionario(funcionario_id: int, db: Session = Depends(get_db)):
+    item = funcionario_service.obter_funcionario(db, funcionario_id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Funcionario não encontrado")
+    return item
 
-@router.post("/funcionarios", response_model=FuncionarioResponse)
-def criar(data: FuncionarioCreate, db: Session = Depends(get_db)):
-    return FuncionarioService(db).criar(data)
+@router.put("/{funcionario_id}", response_model=FuncionarioRead)
+def atualizar_funcionario(funcionario_id: int, dados: FuncionarioCreate, db: Session = Depends(get_db)):
+    item = funcionario_service.atualizar_funcionario(db, funcionario_id, dados)
+    if not item:
+        raise HTTPException(status_code=404, detail="Funcionario não encontrado")
+    return item
 
-@router.put("/funcionarios/{id}", response_model=FuncionarioResponse)
-def editar(id: int, data: FuncionarioUpdate, db: Session = Depends(get_db)):
-    funcionario = FuncionarioService(db).editar(id, data)
-    if not funcionario:
-        raise HTTPException(404, "Funcionário não encontrado")
-    return funcionario
-
-@router.delete("/funcionarios/{id}", response_model=FuncionarioResponse)
-def excluir(id: int, db: Session = Depends(get_db)):
-    funcionario = FuncionarioService(db).excluir(id)
-    if not funcionario:
-        raise HTTPException(404, "Funcionário não encontrado")
-    return funcionario
+@router.delete("/{funcionario_id}")
+def deletar_funcionario(funcionario_id: int, db: Session = Depends(get_db)):
+    sucesso = funcionario_service.deletar_funcionario(db, funcionario_id)
+    if not sucesso:
+        raise HTTPException(status_code=404, detail="Funcionario não encontrado")
+    return {"detail": "Funcionario deletado com sucesso"}
