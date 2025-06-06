@@ -6,7 +6,7 @@ class ClienteServicoBase(BaseModel):
     id_cliente: int
     id_funcionario: int
     id_servico: int
-    valor_cobrado: float
+    valor: float
     observacoes: Optional[str]
     data_atendimento: datetime
 

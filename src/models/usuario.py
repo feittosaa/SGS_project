@@ -7,7 +7,8 @@ class Usuario(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String(150), nullable=False)
-    email = Column(String(150), nullable=False, unique=True)
+    nome_grupo = Column(String(150), nullable=True)
+    login = Column(String(150), nullable=False, unique=True)
     senha = Column(String(150), nullable=False)
 
     clientes = relationship("Cliente", back_populates="usuario")
@@ -15,7 +16,8 @@ class Usuario(Base):
     servicos = relationship("Servico", back_populates="usuario")
     funcionarios = relationship("Funcionario", back_populates="usuario")
 
-    def __init__(self, nome, email, senha):
+    def __init__(self, nome, nome_grupo, login, senha):
         self.nome = nome
-        self.email = email
+        self.nome_grupo = nome_grupo
+        self.login = login
         self.senha = senha

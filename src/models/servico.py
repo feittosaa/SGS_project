@@ -12,7 +12,12 @@ class Servico(Base):
     id_grupo = Column(Integer, ForeignKey("usuario.id"), nullable=False)
 
     usuario = relationship("Usuario", back_populates="servicos")
-    clientes = relationship("ClienteServico", back_populates="servico")
+    clientes = relationship(
+        "ClienteServico",
+        back_populates="servico",
+        cascade="all, delete",
+        passive_deletes=True
+    )
 
     def __init__(self, nome, categoria, valor, id_grupo):
         self.nome = nome

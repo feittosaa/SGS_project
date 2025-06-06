@@ -10,7 +10,7 @@ router = APIRouter(tags=["Produtos"])
 def criar_produto(produto: ProdutoCreate, db: Session = Depends(get_db)):
     return produto_service.criar_produto(db, produto)
 
-@router.get("/", response_model=List[ProdutoRead])
+@router.get("/", response_model=list[ProdutoRead])
 def listar_produtos(db: Session = Depends(get_db)):
     return produto_service.listar_produtos(db)
 

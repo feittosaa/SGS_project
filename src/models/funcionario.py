@@ -11,8 +11,18 @@ class Funcionario(Base):
     id_grupo = Column(Integer, ForeignKey("usuario.id"), nullable=False)
 
     usuario = relationship("Usuario", back_populates="funcionarios")
-    vendas_produto = relationship("ClienteProduto", back_populates="funcionario")
-    atendimentos = relationship("ClienteServico", back_populates="funcionario")
+    vendas_produto = relationship(
+        "ClienteProduto",
+        back_populates="funcionario",
+        cascade="all, delete",
+        passive_deletes=True
+    )
+    atendimentos = relationship(
+        "ClienteServico",
+        back_populates="funcionario",
+        cascade="all, delete",
+        passive_deletes=True
+    )
 
     def __init__(self, nome, salario, id_grupo):
         self.nome = nome

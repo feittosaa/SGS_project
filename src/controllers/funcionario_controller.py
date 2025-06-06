@@ -10,7 +10,7 @@ router = APIRouter(tags=["Funcionários"])
 def criar_funcionario(funcionario: FuncionarioCreate, db: Session = Depends(get_db)):
     return funcionario_service.criar_funcionario(db, funcionario)
 
-@router.get("/", response_model=List[FuncionarioRead])
+@router.get("/", response_model=list[FuncionarioRead])
 def listar_funcionarios(db: Session = Depends(get_db)):
     return funcionario_service.listar_funcionarios(db)
 

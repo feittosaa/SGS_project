@@ -10,7 +10,7 @@ router = APIRouter(tags=["Usuários"])
 def criar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     return usuario_service.criar_usuario(db, usuario)
 
-@router.get("/", response_model=List[UsuarioRead])
+@router.get("/", response_model=list[UsuarioRead])
 def listar_usuarios(db: Session = Depends(get_db)):
     return usuario_service.listar_usuarios(db)
 
