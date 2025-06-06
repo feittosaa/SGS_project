@@ -3,6 +3,11 @@ from src.models.cliente_produto import ClienteProduto
 from src.schemas.cliente_produto_schema import ClienteProdutoCreate
 
 def criar_cliente_produto(db: Session, cliente_produto: ClienteProdutoCreate):
+    produto = db.query(Produto).filter(Produto.id == ClienteProduto.id_produto).first()
+    if produto.quantidade_disponivel < ClienteProduto.quantidade:
+        raise HTTPException(status_code=400, detail="Estoque insuficiente")
+    produto.quantidade_disponivel -= ClienteProduto.quantidade
+
     db_item = ClienteProduto(**cliente_produto.dict())
     db.add(db_item)
     db.commit()

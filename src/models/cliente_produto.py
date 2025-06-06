@@ -7,7 +7,7 @@ class ClienteProduto(Base):
     __tablename__ = "cliente_produto"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_cliente = Column(Integer, ForeignKey("cliente.id", ondelete="CASCADE"), nullable=False)
+    id_cliente = Column(Integer, ForeignKey("cliente.id", ondelete="CASCADE"), nullable=True)
     id_funcionario = Column(Integer, ForeignKey("funcionario.id", ondelete="CASCADE"), nullable=False)
     id_produto = Column(Integer, ForeignKey("produto.id", ondelete="CASCADE"), nullable=False)
     data_venda = Column(DateTime, default=datetime.utcnow)

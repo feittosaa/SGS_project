@@ -7,7 +7,7 @@ class ClienteServico(Base):
     __tablename__ = "cliente_servico"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_cliente = Column(Integer, ForeignKey("cliente.id", ondelete="CASCADE"), nullable=False)
+    id_cliente = Column(Integer, ForeignKey("cliente.id", ondelete="CASCADE"), nullable=True)
     id_funcionario = Column(Integer, ForeignKey("funcionario.id", ondelete="CASCADE"), nullable=False)
     id_servico = Column(Integer, ForeignKey("servico.id", ondelete="CASCADE"), nullable=False)
     data_atendimento = Column(DateTime, default=datetime.utcnow)
