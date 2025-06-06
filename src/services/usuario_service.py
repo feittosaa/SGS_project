@@ -9,6 +9,9 @@ def criar_usuario(db: Session, usuario: UsuarioCreate):
     db.refresh(db_item)
     return db_item
 
+def listar_usuarios(db: Session):
+    return db.query(Usuario).all()
+
 def obter_usuario(db: Session, usuario_id: int):
     return db.query(Usuario).filter(Usuario.id == usuario_id).first()
 

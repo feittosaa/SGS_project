@@ -10,6 +10,10 @@ router = APIRouter(tags=["Produtos"])
 def criar_produto(produto: ProdutoCreate, db: Session = Depends(get_db)):
     return produto_service.criar_produto(db, produto)
 
+@router.get("/", response_model=List[ProdutoRead])
+def listar_produtos(db: Session = Depends(get_db)):
+    return produto_service.listar_produtos(db)
+
 @router.get("/{produto_id}", response_model=ProdutoRead)
 def obter_produto(produto_id: int, db: Session = Depends(get_db)):
     item = produto_service.obter_produto(db, produto_id)

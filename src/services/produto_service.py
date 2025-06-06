@@ -9,6 +9,9 @@ def criar_produto(db: Session, produto: ProdutoCreate):
     db.refresh(db_item)
     return db_item
 
+def listar_produtos(db: Session):
+    return db.query(Produto).all()
+
 def obter_produto(db: Session, produto_id: int):
     return db.query(Produto).filter(Produto.id == produto_id).first()
 

@@ -9,6 +9,9 @@ def criar_funcionario(db: Session, funcionario: FuncionarioCreate):
     db.refresh(db_item)
     return db_item
 
+def listar_funcionarios(db: Session):
+    return db.query(Funcionario).all()
+
 def obter_funcionario(db: Session, funcionario_id: int):
     return db.query(Funcionario).filter(Funcionario.id == funcionario_id).first()
 

@@ -9,6 +9,9 @@ def criar_cliente_produto(db: Session, cliente_produto: ClienteProdutoCreate):
     db.refresh(db_item)
     return db_item
 
+def listar_clientes_produtos(db: Session):
+    return db.query(ClienteProduto).all()
+
 def obter_cliente_produto(db: Session, cliente_produto_id: int):
     return db.query(ClienteProduto).filter(ClienteProduto.id == cliente_produto_id).first()
 

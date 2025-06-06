@@ -9,6 +9,9 @@ def criar_cliente(db: Session, cliente: ClienteCreate):
     db.refresh(db_cliente)
     return db_cliente
 
+def listar_clientes(db: Session):
+    return db.query(Cliente).all()
+
 def obter_cliente(db: Session, cliente_id: int):
     return db.query(Cliente).filter(Cliente.id == cliente_id).first()
 

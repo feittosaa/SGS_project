@@ -10,6 +10,10 @@ router = APIRouter(tags=["Clientes-Produtos"])
 def criar_cliente_produto(cliente_produto: ClienteProdutoCreate, db: Session = Depends(get_db)):
     return cliente_produto_service.criar_cliente_produto(db, cliente_produto)
 
+@router.get("/", response_model=List[ClienteProdutoRead])
+def listar_clientes_produtos(db: Session = Depends(get_db)):
+    return cliente_produto_service.listar_clientes_produtos(db)
+
 @router.get("/{cliente_produto_id}", response_model=ClienteProdutoRead)
 def obter_cliente_produto(cliente_produto_id: int, db: Session = Depends(get_db)):
     item = cliente_produto_service.obter_cliente_produto(db, cliente_produto_id)
