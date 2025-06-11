@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 class ClienteServicoBase(BaseModel):
-    id_cliente: int
+    id_cliente: Optional[int] = None
     id_funcionario: int
     id_servico: int
     valor: float
