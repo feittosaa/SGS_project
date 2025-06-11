@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.schemas.cliente_schema import ClienteCreate, ClienteRead
+from src.schemas.cliente_schema import ClienteCreate, ClienteRead, ClienteHistoricoSchema
 from src.database.session import get_db
 from src.services import cliente_service
+from src.models.cliente import Cliente
 
 router = APIRouter(tags=["Clientes"])
 
@@ -34,3 +35,15 @@ def deletar_cliente(cliente_id: int, db: Session = Depends(get_db)):
     if not sucesso:
         raise HTTPException(status_code=404, detail="Cliente não encontrado")
     return {"detail": "Cliente deletado com sucesso"}
+
+@router.get("/{cliente_id}/historico", response_model=ClienteHistoricoSchema)
+def obter_historico(cliente_id: int, db: Session = Depends(get_db)):
+    cliente = db.query(Cliente).filter(Cliente.id == cliente_id).first()
+    if not cliente:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+
+    return {
+        "produtos": cliente.produtos,
+        "servicos": cliente.servicos
+    }
+

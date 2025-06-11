@@ -32,3 +32,13 @@ def deletar_funcionario(db: Session, funcionario_id: int):
     db.delete(item)
     db.commit()
     return True
+
+def calcular_salario(funcionario: Funcionario, db: Session):
+    if funcionario.tipo_salario == "fixo":
+        return funcionario.salario
+    elif funcionario.tipo_salario == "percentual_total":
+        total = calcular_vendas_funcionario(funcionario.id, db)  #Implementar cálculo depois
+        return total * funcionario.salario / 100
+    elif funcionario.tipo_salario == "percentual_servico":
+        total = calcular_servicos_funcionario(funcionario.id, db)  #Implementar cálculo depois
+        return total * funcionario.salario / 100

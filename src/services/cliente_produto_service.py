@@ -1,13 +1,33 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from src.models.cliente_produto import ClienteProduto
+from src.models.cliente import Cliente
+from src.models.produto import Produto
 from src.schemas.cliente_produto_schema import ClienteProdutoCreate
 
 def criar_cliente_produto(db: Session, cliente_produto: ClienteProdutoCreate):
+
+    if cliente_produto.id_cliente is not None:
+        cliente = db.query(Cliente).filter(Cliente.id == cliente_produto.id_cliente).first()
+        if not cliente:
+            raise HTTPException(status_code=404, detail="Cliente não encontrado")
+
+    produto = db.query(Produto).filter(Produto.id == cliente_produto.id_produto).first()
+    if not produto:
+        raise HTTPException(status_code=404, detail="Produto não encontrado")
+
+    if produto.quantidade < cliente_produto.quantidade:
+        raise HTTPException(status_code=400, detail="Estoque insuficiente")
+
+    produto.quantidade -= cliente_produto.quantidade
+
     db_item = ClienteProduto(**cliente_produto.dict())
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
 
 def listar_clientes_produtos(db: Session):
     return db.query(ClienteProduto).all()
