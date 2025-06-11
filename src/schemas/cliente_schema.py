@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 import re
-from typing import Optional
+from typing import Optional, List
 from datetime import date, datetime
 
 class ClienteBase(BaseModel):
@@ -20,7 +20,7 @@ class ClienteCreate(BaseModel):
     @validator("cpf")
     def validar_cpf(cls, cpf):
         if cpf and not re.fullmatch(r"\d{11}", cpf):
-            raise ValueError("CPF inválido. Deve conter 11 dígitos numéricos.")  #Implementar cálculo depois
+            raise ValueError("CPF inválido. Deve conter 11 dígitos numéricos.")
         return cpf
 
 class ClienteRead(ClienteBase):
@@ -50,5 +50,8 @@ class ServicoHistoricoSchema(BaseModel):
         orm_mode = True
 
 class ClienteHistoricoSchema(BaseModel):
-    produtos: list[ProdutoHistoricoSchema]
-    servicos: list[ServicoHistoricoSchema]
+    produtos: List[ProdutoHistoricoSchema]
+    servicos: List[ServicoHistoricoSchema]
+
+    class Config:
+        orm_mode = True

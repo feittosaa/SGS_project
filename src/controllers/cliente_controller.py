@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from src.schemas.cliente_schema import ClienteCreate, ClienteRead, ClienteHistoricoSchema
 from src.database.session import get_db
 from src.services import cliente_service
+from src.models.cliente import Cliente
 
 router = APIRouter(tags=["Clientes"])
 
