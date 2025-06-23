@@ -1,0 +1,9 @@
+| Ação real no salão                                                           | Tela que o usuário usaria           |
+| ---------------------------------------------------------------------------- | ----------------------------------- |
+| Cadastrar um novo produto à venda                                            | Tela de Produto                     |
+| Cadastrar um novo serviço disponível                                         | Tela de Serviço                     |
+| Cadastrar um novo cliente                                                    | Tela de Cliente                     |
+| Cadastrar um novo funcionário                                                | Tela de Funcionário                 |
+| Registrar uma venda (ex: cliente comprou shampoo com funcionário X)          | Tela de Cliente-Produto             |
+| Registrar um atendimento (ex: cliente fez corte de cabelo com funcionário Y) | Tela de Cliente-Serviço             |
+| Ver histórico de compras de um cliente                                       | Endpoint `/clientes/{id}/historico` |
