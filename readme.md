@@ -8,9 +8,10 @@ O objetivo do projeto é fornecer uma API simples e funcional para gerenciar cli
 
 ## Tecnologias Utilizadas
 
-- [Python 3.10+](https://www.python.org/)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Uvicorn](https://www.uvicorn.org/)
+- [Python 3.13.5]
+- [FastAPI]
+- [Uvicorn]
+- [Tkinter]
 
 ---
 
@@ -33,6 +34,9 @@ O objetivo do projeto é fornecer uma API simples e funcional para gerenciar cli
 5. Acesse no navegador:
   API: http://localhost:8000/
   Documentação Swagger: http://localhost:8000/docs
+
+6. Rode o Front-end:
+  .\iniciar_app.bat
 
 ---
 
