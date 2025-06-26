@@ -6,6 +6,7 @@ from servico_screen import ServicoScreen
 from usuario_screen import UsuarioScreen
 from cliente_produto_screen import ClienteProdutoScreen
 from cliente_servico_screen import ClienteServicoScreen
+from historico_screen import HistoricoScreen
 
 def abrir_cliente():
     janela = tk.Toplevel(root)
@@ -35,6 +36,11 @@ def abrir_cliente_servico():
     janela = tk.Toplevel(root)
     ClienteServicoScreen(janela)
 
+def abrir_historico():
+    janela = tk.Toplevel(root)
+    HistoricoScreen(janela)
+
+
 root = tk.Tk()
 root.title("SGS - Sistema de Gerenciamento de Salões")
 
@@ -46,6 +52,7 @@ tk.Button(root, text="Clientes", width=30, command=abrir_cliente).pack(pady=5)
 tk.Button(root, text="Funcionários", width=30, command=abrir_funcionario).pack(pady=5)
 tk.Button(root, text="Produtos", width=30, command=abrir_produto).pack(pady=5)
 tk.Button(root, text="Serviços", width=30, command=abrir_servico).pack(pady=5)
+tk.Button(root, text="Histórico de Vendas", width=30, command=abrir_historico).pack(pady=5)
 # tk.Button(root, text="Usuários", width=30, command=abrir_usuario).pack(pady=5)
 
 root.mainloop()
