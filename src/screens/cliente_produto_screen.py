@@ -1,114 +1,86 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import requests
 from datetime import datetime
 
-BASE_URL = "http://localhost:8000/clientes-produtos"
+BASE_URL = "http://localhost:8000"
 
 class ClienteProdutoScreen:
     def __init__(self, root):
         self.root = root
         self.root.title("Registro de Vendas - Cliente Produto")
 
-        # Labels e Entradas
-        tk.Label(root, text="ID:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
-        self.entry_id = tk.Entry(root)
-        self.entry_id.grid(row=0, column=1, padx=5, pady=5)
+        # Carregar dados iniciais
+        self.clientes = self.get_opcoes("clientes")
+        self.funcionarios = self.get_opcoes("funcionarios")
+        self.produtos = self.get_opcoes("produtos")
 
-        tk.Label(root, text="ID Cliente:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        self.entry_id_cliente = tk.Entry(root)
-        self.entry_id_cliente.grid(row=1, column=1, padx=5, pady=5)
+        # Variáveis selecionadas
+        self.var_cliente = tk.StringVar()
+        self.var_funcionario = tk.StringVar()
+        self.var_produto = tk.StringVar()
 
-        tk.Label(root, text="ID Funcionário:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
-        self.entry_id_funcionario = tk.Entry(root)
-        self.entry_id_funcionario.grid(row=2, column=1, padx=5, pady=5)
+        # Labels e Combobox
+        tk.Label(root, text="Cliente:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+        self.select_cliente = ttk.Combobox(root, textvariable=self.var_cliente, values=list(self.clientes.keys()))
+        self.select_cliente.grid(row=0, column=1, padx=5, pady=5)
 
-        tk.Label(root, text="ID Produto:").grid(row=3, column=0, padx=5, pady=5, sticky="e")
-        self.entry_id_produto = tk.Entry(root)
-        self.entry_id_produto.grid(row=3, column=1, padx=5, pady=5)
+        tk.Label(root, text="Funcionário:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        self.select_funcionario = ttk.Combobox(root, textvariable=self.var_funcionario, values=list(self.funcionarios.keys()))
+        self.select_funcionario.grid(row=1, column=1, padx=5, pady=5)
 
-        tk.Label(root, text="Valor Total:").grid(row=4, column=0, padx=5, pady=5, sticky="e")
+        tk.Label(root, text="Produto:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        self.select_produto = ttk.Combobox(root, textvariable=self.var_produto, values=list(self.produtos.keys()))
+        self.select_produto.grid(row=2, column=1, padx=5, pady=5)
+
+        # Entradas
+        tk.Label(root, text="Valor Total:").grid(row=3, column=0, padx=5, pady=5, sticky="e")
         self.entry_valor_total = tk.Entry(root)
-        self.entry_valor_total.grid(row=4, column=1, padx=5, pady=5)
+        self.entry_valor_total.grid(row=3, column=1, padx=5, pady=5)
 
-        tk.Label(root, text="Quantidade:").grid(row=5, column=0, padx=5, pady=5, sticky="e")
+        tk.Label(root, text="Quantidade:").grid(row=4, column=0, padx=5, pady=5, sticky="e")
         self.entry_quantidade = tk.Entry(root)
-        self.entry_quantidade.grid(row=5, column=1, padx=5, pady=5)
+        self.entry_quantidade.grid(row=4, column=1, padx=5, pady=5)
 
         # Botões
-        tk.Button(root, text="Registrar Venda", command=self.cadastrar).grid(row=6, column=0, padx=5, pady=5)
-        tk.Button(root, text="Buscar", command=self.buscar).grid(row=6, column=1, padx=5, pady=5)
-        tk.Button(root, text="Atualizar", command=self.atualizar).grid(row=7, column=0, padx=5, pady=5)
-        tk.Button(root, text="Excluir", command=self.excluir).grid(row=7, column=1, padx=5, pady=5)
-        tk.Button(root, text="Limpar", command=self.limpar).grid(row=8, column=0, columnspan=2, padx=5, pady=5)
+        tk.Button(root, text="Registrar Venda", command=self.cadastrar).grid(row=5, column=0, padx=5, pady=5)
+        tk.Button(root, text="Limpar", command=self.limpar).grid(row=5, column=1, padx=5, pady=5)
+
+    def get_opcoes(self, endpoint):
+        try:
+            response = requests.get(f"{BASE_URL}/{endpoint}")
+            if response.status_code == 200:
+                lista = response.json()
+                return {item["nome"]: item["id"] for item in lista if "nome" in item}
+            else:
+                return {}
+        except Exception as e:
+            print(f"Erro ao buscar {endpoint}: {e}")
+            return {}
 
     def get_data(self):
         return {
-            "id_cliente": int(self.entry_id_cliente.get()) if self.entry_id_cliente.get() else None,
-            "id_funcionario": int(self.entry_id_funcionario.get()),
-            "id_produto": int(self.entry_id_produto.get()),
+            "id_cliente": self.clientes.get(self.var_cliente.get()) if self.var_cliente.get() else None,
+            "id_funcionario": self.funcionarios.get(self.var_funcionario.get()),
+            "id_produto": self.produtos.get(self.var_produto.get()),
             "valor_total": float(self.entry_valor_total.get()),
             "quantidade": float(self.entry_quantidade.get()),
             "data_venda": datetime.utcnow().isoformat()
         }
 
     def cadastrar(self):
-        response = requests.post(f"{BASE_URL}/", json=self.get_data())
+        data = self.get_data()
+        response = requests.post(f"{BASE_URL}/clientes-produtos/", json=data)
         if response.status_code == 200:
             messagebox.showinfo("Sucesso", "Venda registrada com sucesso!")
             self.limpar()
         else:
             messagebox.showerror("Erro", response.text)
 
-    def buscar(self):
-        item_id = self.entry_id.get()
-        if not item_id:
-            messagebox.showwarning("Aviso", "Informe o ID")
-            return
-        response = requests.get(f"{BASE_URL}/{item_id}")
-        if response.status_code == 200:
-            item = response.json()
-            self.entry_id_cliente.delete(0, tk.END)
-            self.entry_id_cliente.insert(0, item.get("id_cliente") or "")
-            self.entry_id_funcionario.delete(0, tk.END)
-            self.entry_id_funcionario.insert(0, item["id_funcionario"])
-            self.entry_id_produto.delete(0, tk.END)
-            self.entry_id_produto.insert(0, item["id_produto"])
-            self.entry_valor_total.delete(0, tk.END)
-            self.entry_valor_total.insert(0, item["valor_total"])
-            self.entry_quantidade.delete(0, tk.END)
-            self.entry_quantidade.insert(0, item["quantidade"])
-        else:
-            messagebox.showerror("Erro", response.text)
-
-    def atualizar(self):
-        item_id = self.entry_id.get()
-        if not item_id:
-            messagebox.showwarning("Aviso", "Informe o ID para atualizar")
-            return
-        response = requests.put(f"{BASE_URL}/{item_id}", json=self.get_data())
-        if response.status_code == 200:
-            messagebox.showinfo("Sucesso", "Venda atualizada!")
-        else:
-            messagebox.showerror("Erro", response.text)
-
-    def excluir(self):
-        item_id = self.entry_id.get()
-        if not item_id:
-            messagebox.showwarning("Aviso", "Informe o ID para excluir")
-            return
-        response = requests.delete(f"{BASE_URL}/{item_id}")
-        if response.status_code == 204:
-            messagebox.showinfo("Sucesso", "Registro excluído!")
-            self.limpar()
-        else:
-            messagebox.showerror("Erro", response.text)
-
     def limpar(self):
-        self.entry_id.delete(0, tk.END)
-        self.entry_id_cliente.delete(0, tk.END)
-        self.entry_id_funcionario.delete(0, tk.END)
-        self.entry_id_produto.delete(0, tk.END)
+        self.var_cliente.set('')
+        self.var_funcionario.set('')
+        self.var_produto.set('')
         self.entry_valor_total.delete(0, tk.END)
         self.entry_quantidade.delete(0, tk.END)
 
