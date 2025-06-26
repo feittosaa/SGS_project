@@ -105,7 +105,7 @@ class ClienteScreen:
             messagebox.showwarning("Aviso", "Informe o ID do cliente para excluir")
             return
         response = requests.delete(f"{BASE_URL}/{cliente_id}")
-        if response.status_code == 204:
+        if response.status_code == 200:
             messagebox.showinfo("Sucesso", "Cliente excluído com sucesso!")
             self.limpar_campos()
         else:
