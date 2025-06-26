@@ -46,6 +46,6 @@ tk.Button(root, text="Clientes", width=30, command=abrir_cliente).pack(pady=5)
 tk.Button(root, text="Funcionários", width=30, command=abrir_funcionario).pack(pady=5)
 tk.Button(root, text="Produtos", width=30, command=abrir_produto).pack(pady=5)
 tk.Button(root, text="Serviços", width=30, command=abrir_servico).pack(pady=5)
-tk.Button(root, text="Usuários", width=30, command=abrir_usuario).pack(pady=5)
+# tk.Button(root, text="Usuários", width=30, command=abrir_usuario).pack(pady=5)
 
 root.mainloop()
